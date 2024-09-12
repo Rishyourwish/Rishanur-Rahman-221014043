@@ -1,0 +1,124 @@
+import java.util.ArrayList;
+import java.util.List;
+
+abstract class Doctor {
+    private int doctorId;
+    private String name;
+    private String specialization;
+    private List<String> availability;
+
+    public Doctor(int doctorId, String name, String specialization) {
+        this.doctorId = doctorId;
+        this.name = name;
+        this.specialization = specialization;
+        this.availability = new ArrayList<>();
+    }
+
+    public int getDoctorId() {
+        return doctorId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public List<String> getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(List<String> availability) {
+        this.availability = availability;
+    }
+
+    public abstract void displayAvailability();
+}
+
+class GeneralPractitioner extends Doctor {
+    public GeneralPractitioner(int doctorId, String name) {
+        super(doctorId, name, "General Practitioner");
+    }
+
+    @Override
+    public void displayAvailability() {
+        System.out.println("Dr. " + getName() + " is available for walk-in patients at the following times:");
+        for (String time : getAvailability()) {
+            System.out.println("- " + time);
+        }
+    }
+}
+
+class Patient {
+    private int patientId;
+    private String name;
+
+    public Patient(int patientId, String name) {
+        this.patientId = patientId;
+        this.name = name;
+    }
+
+    public int getPatientId() {
+        return patientId;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+class Appointment {
+    private int appointmentId;
+    private Doctor doctor;
+    private Patient patient;
+    private String time;
+
+    public Appointment(int appointmentId, Doctor doctor, Patient patient, String time) {
+        this.appointmentId = appointmentId;
+        this.doctor = doctor;
+        this.patient = patient;
+        this.time = time;
+    }
+
+    public int getAppointmentId() {
+        return appointmentId;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public String getTime() {
+        return time;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        List<Doctor> doctors = new ArrayList<>();
+        doctors.add(new GeneralPractitioner(1, "Abdul Kader"));
+        doctors.add(new GeneralPractitioner(2, "Sabrin Sultana"));
+
+        List<Patient> patients = new ArrayList<>();
+        patients.add(new Patient(1, "Rishanur Rahman"));
+        patients.add(new Patient(2, "Mahir Siam"));
+
+        List<Appointment> appointments = new ArrayList<>();
+        appointments.add(new Appointment(1, doctors.get(0), patients.get(0), "08:00 AM"));
+        appointments.add(new Appointment(2, doctors.get(1), patients.get(1), "11:00 AM"));
+
+        for (Doctor doctor : doctors) {
+            doctor.displayAvailability();
+        }
+
+        for (Appointment appointment : appointments) {
+            System.out.println("Appointment " + appointment.getAppointmentId() + ": Dr. " + appointment.getDoctor().getName() + " - " + appointment.getPatient().getName() + " at " + appointment.getTime());
+        }
+    }
+}
